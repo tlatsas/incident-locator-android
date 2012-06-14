@@ -12,4 +12,9 @@ public class IncidentLocator extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
+
+    public void getLocation(View view) {
+        Intent intent = new Intent(this, GetLocationActivity.class);
+        startActivity(intent);
+    }
 }
