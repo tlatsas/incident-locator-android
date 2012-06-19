@@ -12,7 +12,7 @@ import com.incidentlocator.client.GetLocationListener;
 public class IncidentLocator extends Activity
 {
 
-    private LocationManager locationManager;
+    protected LocationManager locationManager;
 
     /** Called when the activity is first created. */
     @Override
