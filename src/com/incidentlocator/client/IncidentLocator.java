@@ -7,7 +7,12 @@ import android.widget.TextView;
 
 import android.content.Context;
 import android.location.LocationManager;
-import com.incidentlocator.client.GetLocationListener;
+
+import android.location.Location;
+import android.location.LocationListener;
+//import android.location.LocationManager;
+//import android.os.Bundle;
+
 
 public class IncidentLocator extends Activity
 {
@@ -27,6 +32,24 @@ public class IncidentLocator extends Activity
         // TODO: request both gps and network updates
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 0, 0, new GetLocationListener());
+    }
+
+    public class GetLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location loc) {
+            // do something
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {}
+
+        @Override
+        public void onProviderEnabled(String provider) {}
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {}
+
     }
 
     public void getLocation(View view) {
