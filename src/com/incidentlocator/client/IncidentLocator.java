@@ -12,12 +12,19 @@ import android.location.Location;
 import android.location.LocationListener;
 //import android.location.LocationManager;
 //import android.os.Bundle;
+import android.util.Log;
 
 
 public class IncidentLocator extends Activity
 {
+    private static final String TAG = "IncidentLocator";
 
     protected LocationManager locationManager;
+
+    private static int lat;
+    private static int lng;
+
+    private TextView textView;
 
     /** Called when the activity is first created. */
     @Override
@@ -25,6 +32,8 @@ public class IncidentLocator extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        textView = (TextView) findViewById(R.id.show_message);
 
         locationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -38,7 +47,13 @@ public class IncidentLocator extends Activity
 
         @Override
         public void onLocationChanged(Location loc) {
-            // do something
+            lat = (int) (loc.getLatitude()*1E6);
+            lng = (int) (loc.getLongitude()*1E6);
+            Log.d(TAG, "lat=" + lat);
+            Log.d(TAG, "lng=" + lng);
+
+            String message = Integer.toString(lat) + Integer.toString(lng);
+            textView.setText(message);
         }
 
         @Override
