@@ -19,8 +19,8 @@ public class IncidentLocator extends Activity
 
     protected LocationManager locationManager;
 
-    private static int lat;
-    private static int lng;
+    private static float lat;
+    private static float lng;
 
     private TextView textView;
 
@@ -45,13 +45,8 @@ public class IncidentLocator extends Activity
 
         @Override
         public void onLocationChanged(Location loc) {
-            lat = (int) (loc.getLatitude()*1E6);
-            lng = (int) (loc.getLongitude()*1E6);
-            Log.d(TAG, "lat=" + lat);
-            Log.d(TAG, "lng=" + lng);
-
-            String message = Integer.toString(lat) + Integer.toString(lng);
-            textView.setText(message);
+            lat = (float) loc.getLatitude();
+            lng = (float) loc.getLongitude();
         }
 
         @Override
