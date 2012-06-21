@@ -24,7 +24,6 @@ public class IncidentLocator extends Activity
 
     private TextView textView;
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
