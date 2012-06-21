@@ -3,7 +3,7 @@ package com.incidentlocator.client;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import android.content.Context;
 import android.location.LocationManager;
@@ -22,7 +22,7 @@ public class IncidentLocator extends Activity
     private static float lat;
     private static float lng;
 
-    private TextView textView;
+    private EditText coordinatesBox;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -30,7 +30,7 @@ public class IncidentLocator extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        textView = (TextView) findViewById(R.id.show_message);
+        coordinatesBox = (EditText) findViewById(R.id.show_message);
 
         locationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -62,7 +62,8 @@ public class IncidentLocator extends Activity
     }
 
     public void getLocation(View view) {
-        String message = Float.toString(lat) + Float.toString(lng);
-        textView.setText(message);
+        String message = "Lat: " + Float.toString(lat) +
+                         " Lng: " + Float.toString(lng) + "\n";
+        coordinatesBox.append(message);
     }
 }

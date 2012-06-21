@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">IncidentLocator</string>
-    <string name="show_message">Press the button to get location</string>
     <string name="get_location">Get Location</string>
 </resources>
