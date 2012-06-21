@@ -46,6 +46,8 @@ public class IncidentLocator extends Activity
         public void onLocationChanged(Location loc) {
             lat = (float) loc.getLatitude();
             lng = (float) loc.getLongitude();
+            Log.d(TAG, "[GPS] lat: " + lat);
+            Log.d(TAG, "[GPS] lng: " + lng);
         }
 
         @Override
