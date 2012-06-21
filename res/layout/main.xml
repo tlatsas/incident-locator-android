@@ -10,6 +10,11 @@
         android:layout_height="wrap_content"
         android:singleLine="false"
         android:lines="8"
+        android:editable="false"
+        android:clickable="false"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:gravity="top"
         />
     <Button
