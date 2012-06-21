@@ -62,9 +62,7 @@ public class IncidentLocator extends Activity
     }
 
     public void getLocation(View view) {
-        String message = "Hello from incident Locator";
-
-        TextView textView = (TextView) findViewById(R.id.show_message);
+        String message = Float.toString(lat) + Float.toString(lng);
         textView.setText(message);
     }
 }
