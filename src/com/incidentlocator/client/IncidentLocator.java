@@ -33,6 +33,11 @@ public class IncidentLocator extends Activity
 
         locationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
         // TODO: request both gps and network updates
         locationManager.requestLocationUpdates(
