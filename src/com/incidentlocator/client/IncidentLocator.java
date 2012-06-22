@@ -25,8 +25,7 @@ public class IncidentLocator extends Activity
     private EditText coordinatesBox;
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
