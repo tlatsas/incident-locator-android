@@ -66,17 +66,19 @@ public class IncidentLocator extends Activity
             AlertDialog alert = builder.create();
             alert.show();
         }
-        // TODO: request both gps and network updates
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 0, 0, new GetLocationListener());
-    }
+   }
 
     @Override
     public void onResume() {
         super.onResume();
+
+        locationManager.removeUpdates(locationListener);
+        // TODO: request both gps and network updates
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
 
-    public class GetLocationListener implements LocationListener {
+    private static LocationListener locationListener = new LocationListener() {
 
         @Override
         public void onLocationChanged(Location loc) {
@@ -95,7 +97,7 @@ public class IncidentLocator extends Activity
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
 
-    }
+    };
 
     public void getLocation(View view) {
         String message = "Lat: " + Float.toString(lat) +
