@@ -44,6 +44,11 @@ public class IncidentLocator extends Activity
             LocationManager.GPS_PROVIDER, 0, 0, new GetLocationListener());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     public class GetLocationListener implements LocationListener {
 
         @Override
