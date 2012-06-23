@@ -75,8 +75,7 @@ public class IncidentLocator extends Activity
         super.onResume();
     }
 
-    private static LocationListener locationListener = new LocationListener() {
-
+    public class GetLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location loc) {
             lat = (float) loc.getLatitude();
@@ -93,8 +92,7 @@ public class IncidentLocator extends Activity
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-    };
+    }
 
     public void getLocation(View view) {
         String message = "Lat: " + Float.toString(lat) +
