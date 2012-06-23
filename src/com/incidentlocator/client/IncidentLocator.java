@@ -23,6 +23,7 @@ public class IncidentLocator extends Activity
     private static final String TAG = "IncidentLocator";
 
     protected LocationManager locationManager;
+    protected final LocationListener locationListener = new GetLocationListener();
 
     private static float lat;
     private static float lng;
@@ -66,13 +67,15 @@ public class IncidentLocator extends Activity
             AlertDialog alert = builder.create();
             alert.show();
         }
+
         locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 0, 0, new GetLocationListener());
+            LocationManager.GPS_PROVIDER, 0, 0, locationListener);
    }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStop() {
+        super.onStop();
+        locationManager.removeUpdates(locationListener);
     }
 
     public class GetLocationListener implements LocationListener {
