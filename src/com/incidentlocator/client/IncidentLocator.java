@@ -66,16 +66,13 @@ public class IncidentLocator extends Activity
             AlertDialog alert = builder.create();
             alert.show();
         }
+        locationManager.requestLocationUpdates(
+            LocationManager.GPS_PROVIDER, 0, 0, new GetLocationListener());
    }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        locationManager.removeUpdates(locationListener);
-        // TODO: request both gps and network updates
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
 
     private static LocationListener locationListener = new LocationListener() {
