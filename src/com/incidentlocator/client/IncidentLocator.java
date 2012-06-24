@@ -53,8 +53,7 @@ public class IncidentLocator extends Activity
             // create a new dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder
-                .setTitle("GPS is disabled")
-                .setMessage("Do you want to enable it?")
+                .setMessage("GPS is disabled. Do you want to enable it?")
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
