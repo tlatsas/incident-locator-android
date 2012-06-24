@@ -67,7 +67,7 @@ public class IncidentLocator extends Activity
         @Override
         public void onLocationChanged(Location loc) {
             location = loc;
-            Log.d(TAG, "[GPS]" + location.toString());
+            Log.d(TAG, String.format("[%s]=>%s", location.getProvider(), location.toString()));
         }
 
         @Override
