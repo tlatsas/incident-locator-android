@@ -10,8 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.DialogInterface;
 
-import android.location.LocationManager;
 import android.location.Location;
+import android.location.LocationManager;
 import android.location.LocationListener;
 
 import android.provider.Settings;
