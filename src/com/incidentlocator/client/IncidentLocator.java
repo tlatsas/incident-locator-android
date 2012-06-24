@@ -16,6 +16,7 @@ import android.location.LocationListener;
 
 import android.provider.Settings;
 import android.util.Log;
+import java.text.DecimalFormat;
 
 
 public class IncidentLocator extends Activity
@@ -95,8 +96,15 @@ public class IncidentLocator extends Activity
     }
 
     public void getLocation(View view) {
-        String message = "Lat: " + Float.toString(lat) +
-                         " Lng: " + Float.toString(lng) + "\n";
-        coordinatesBox.append(message);
+        DecimalFormat df = new DecimalFormat(".000000");
+        df.setRoundingMode(java.math.RoundingMode.DOWN);
+        StringBuilder sb = new StringBuilder(512);
+        sb
+            .append("Lat: ")
+            .append(df.format(location.getLatitude()))
+            .append("Lng: ")
+            .append(df.format(location.getLongitude()))
+            .append("\n");
+        coordinatesBox.append(sb.toString());
     }
 }
