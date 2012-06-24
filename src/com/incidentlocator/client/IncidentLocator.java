@@ -25,8 +25,7 @@ public class IncidentLocator extends Activity
     protected LocationManager locationManager;
     protected final LocationListener locationListener = new GetLocationListener();
 
-    private static float lat;
-    private static float lng;
+    private static Location location;
 
     private EditText coordinatesBox;
 
@@ -81,10 +80,8 @@ public class IncidentLocator extends Activity
     public class GetLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location loc) {
-            lat = (float) loc.getLatitude();
-            lng = (float) loc.getLongitude();
-            Log.d(TAG, "[GPS] lat: " + lat);
-            Log.d(TAG, "[GPS] lng: " + lng);
+            location = loc;
+            Log.d(TAG, "[GPS]" + location.toString());
         }
 
         @Override
