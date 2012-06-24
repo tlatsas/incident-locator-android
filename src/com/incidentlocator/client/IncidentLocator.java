@@ -83,7 +83,7 @@ public class IncidentLocator extends Activity
     public void getLocation(View view) {
         StringBuilder sb = new StringBuilder(512);
         if (location == null) {
-            sb.append("quering for data...\n");
+            sb.append("waiting location data...\n");
         } else {
             DecimalFormat df = new DecimalFormat(".000000");
             df.setRoundingMode(java.math.RoundingMode.DOWN);
