@@ -50,21 +50,7 @@ public class IncidentLocator extends Activity
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
 
         if (! isGpsEnabled) {
-            // create a new dialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder
-                .setMessage("GPS is disabled. Do you want to enable it?")
-                .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // intent to open settings
-                        Intent settings = new Intent(
-                            Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                        startActivity(settings);
-                    }
-                });
-            AlertDialog alert = builder.create();
-            alert.show();
+            promptOpenLocationSettings("GPS is disabled. Do you want to enable it?");
         }
 
         locationManager.requestLocationUpdates(
@@ -105,5 +91,22 @@ public class IncidentLocator extends Activity
             .append(df.format(location.getLongitude()))
             .append("\n");
         coordinatesBox.append(sb.toString());
+    }
+
+    private void promptOpenLocationSettings(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder
+            .setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // intent to open settings
+                    Intent settings = new Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(settings);
+                }
+            });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
