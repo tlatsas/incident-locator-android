@@ -81,15 +81,19 @@ public class IncidentLocator extends Activity
     }
 
     public void getLocation(View view) {
-        DecimalFormat df = new DecimalFormat(".000000");
-        df.setRoundingMode(java.math.RoundingMode.DOWN);
         StringBuilder sb = new StringBuilder(512);
-        sb
-            .append("Lat: ")
-            .append(df.format(location.getLatitude()))
-            .append("Lng: ")
-            .append(df.format(location.getLongitude()))
-            .append("\n");
+        if (location == null) {
+            sb.append("quering for data...\n");
+        } else {
+            DecimalFormat df = new DecimalFormat(".000000");
+            df.setRoundingMode(java.math.RoundingMode.DOWN);
+            sb
+                .append("Lat: ")
+                .append(df.format(location.getLatitude()))
+                .append("Lng: ")
+                .append(df.format(location.getLongitude()))
+                .append("\n");
+        }
         coordinatesBox.append(sb.toString());
     }
 
