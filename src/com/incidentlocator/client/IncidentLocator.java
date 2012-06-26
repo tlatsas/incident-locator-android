@@ -19,6 +19,7 @@ import android.util.Log;
 import java.text.DecimalFormat;
 
 import com.incidentlocator.client.LocationLogger;
+import android.text.format.Time;
 
 
 public class IncidentLocator extends Activity
@@ -44,6 +45,13 @@ public class IncidentLocator extends Activity
 
         locationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // separate older entries in external log file using dates
+        // and a separator
+        Time now = new Time();
+        now.setToNow();
+        String sep = String.format("==[ %s ] =======================", now.toString());
+        locLogger.saveLocation(sep, IncidentLocator.context);
     }
 
     @Override
