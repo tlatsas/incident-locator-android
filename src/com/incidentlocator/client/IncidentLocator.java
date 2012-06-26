@@ -18,6 +18,8 @@ import android.provider.Settings;
 import android.util.Log;
 import java.text.DecimalFormat;
 
+import com.incidentlocator.client.LocationLogger;
+
 
 public class IncidentLocator extends Activity
 {
@@ -30,6 +32,7 @@ public class IncidentLocator extends Activity
     private static Location location;
 
     private EditText coordinatesBox;
+    private LocationLogger locLogger = new LocationLogger();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,8 @@ public class IncidentLocator extends Activity
                 .append("\n");
         }
         coordinatesBox.append(sb.toString());
+        // log to external storage for debugging/testing
+        locLogger.saveLocation(location, IncidentLocator.context);
     }
 
     private void promptOpenLocationSettings(String message) {
