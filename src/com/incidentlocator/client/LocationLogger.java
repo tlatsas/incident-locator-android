@@ -23,9 +23,9 @@ public class LocationLogger {
     private static final String extFile = "locations.log";
 
     public void saveLocation(String data, Context context) {
-        File extDir = context.getExternalFilesDir(null);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             try {
+                File extDir = context.getExternalFilesDir(null);
                 File fp = new File(extDir, extFile);
                 // open file for append
                 FileWriter fw = new FileWriter(fp, true);
