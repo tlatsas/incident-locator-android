@@ -106,10 +106,11 @@ public class IncidentLocator extends Activity
                 .append("Lng: ")
                 .append(df.format(location.getLongitude()))
                 .append("\n");
+
+            // log to external storage for debugging/testing
+            locLogger.saveLocation(location.toString(), IncidentLocator.context);
         }
         coordinatesBox.append(sb.toString());
-        // log to external storage for debugging/testing
-        locLogger.saveLocation(location.toString(), IncidentLocator.context);
     }
 
     private void promptOpenLocationSettings(String message) {
