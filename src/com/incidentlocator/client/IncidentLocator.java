@@ -22,6 +22,7 @@ import java.text.DecimalFormat;
 public class IncidentLocator extends Activity
 {
     private static final String TAG = "IncidentLocator";
+    private static Context context;
 
     protected LocationManager locationManager;
     protected final LocationListener locationListener = new GetLocationListener();
@@ -33,6 +34,7 @@ public class IncidentLocator extends Activity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IncidentLocator.context = getApplicationContext();
         setContentView(R.layout.main);
 
         coordinatesBox = (EditText) findViewById(R.id.show_message);
