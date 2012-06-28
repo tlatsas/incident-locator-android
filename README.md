@@ -60,11 +60,11 @@ Permissions
 
 * ACCESS_FINE_LOCATION
 
-Use GPS to obtain user location.
+    Use GPS to obtain user location.
 
 * WRITE_EXTERNAL_STORAGE
 
-Log coordinates in external storage.
+    Log coordinates in external storage.
 
 
 SDK Limitations
