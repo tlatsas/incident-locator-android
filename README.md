@@ -19,7 +19,7 @@ Android client for an incident locator service.
 Build
 -----
 
-1. Clone the git repository (or download a specific [tag][1])
+1. Clone the git repository (or download from a specific [tag][1])
 
     `$ git clone https://github.com/tlatsas/incident-locator-android.git`
 
