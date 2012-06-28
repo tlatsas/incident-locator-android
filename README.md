@@ -21,15 +21,15 @@ Build
 
 1. Clone the git repository (or download a specific [tag][1])
 
-    $ git clone https://github.com/tlatsas/incident-locator-android.git
+    `$ git clone https://github.com/tlatsas/incident-locator-android.git`
 
 2. Create the project environment
 
-    $ android update project --path incident-locator-android/
+    `$ android update project --path incident-locator-android/`
 
 3. Navigate into the project folder and compile in debug mode
 
-    $ cd incident-locator-android && ant debug
+    `$ cd incident-locator-android && ant debug`
 
 
 Install
@@ -37,19 +37,19 @@ Install
 
 * Install in default running emulator using `ant`
 
-    $ ant installd
+    `$ ant installd`
 
 * Install in default running emulator using `adb`
 
-    $ adb -e install -s bin/incident_locator-debug.apk
+    `$ adb -e install -s bin/incident_locator-debug.apk`
 
 * You can combine compile and installation using `ant`
 
-    $ ant debug install
+    `$ ant debug install`
 
 * Install in default device
 
-    $ adb -d install -s bin/incident_locator-debug.apk
+    `$ adb -d install -s bin/incident_locator-debug.apk`
 
 
 If your are using eclipse you can find relevant instructions [here][2].
@@ -59,9 +59,11 @@ Permissions
 -----------
 
 * ACCESS_FINE_LOCATION
+
 Use GPS to obtain user location.
 
 * WRITE_EXTERNAL_STORAGE
+
 Log coordinates in external storage.
 
 
