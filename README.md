@@ -8,12 +8,12 @@ Android client for an incident locator service.
 
 **Note** this is still work in progress.
 
-| Project            | IncidentLocator-android
-|:-------------------|:--------------------------------------------------
-| Homepage           | https://github.com/tlatsas/incident-locator-android
-| Version            | v0.1
-| Min SDK Version    | v10
-| License            | BSD 3-Clause
+| Project          | IncidentLocator-android                             |
+|------------------|-----------------------------------------------------|
+| Homepage         | https://github.com/tlatsas/incident-locator-android |
+| Version          | v0.1                                                |
+| Min SDK Version  | v10                                                 |
+| License          | BSD 3-Clause                                        |
 
 
 Build
