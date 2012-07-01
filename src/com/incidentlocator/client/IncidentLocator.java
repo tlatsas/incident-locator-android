@@ -58,16 +58,16 @@ public class IncidentLocator extends Activity
     public void onStart() {
         super.onStart();
 
-        // check if GPS is enabled
+        // check if net provider is enabled
         boolean isGpsEnabled =
-            locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
         if (! isGpsEnabled) {
-            promptOpenLocationSettings("GPS is disabled. Do you want to enable it?");
+            promptOpenLocationSettings("Network provider is disabled. Do you want to enable it?");
         }
 
         locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
    }
 
     @Override
