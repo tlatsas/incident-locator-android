@@ -30,10 +30,15 @@ public class IncidentLocator extends Activity
     protected LocationManager locationManager;
     protected final LocationListener locationListener = new GetLocationListener();
 
+    // user location object
     private static Location location;
 
     private EditText coordinatesBox;
     private LocationLogger locLogger = new LocationLogger();
+
+    // -----------------------------------------------------------------------
+    // activity life-cycle methods
+    // -----------------------------------------------------------------------
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,9 @@ public class IncidentLocator extends Activity
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {}
     }
+    // -----------------------------------------------------------------------
+    // interface controls methods
+    // -----------------------------------------------------------------------
 
     public void getLocation(View view) {
         StringBuilder sb = new StringBuilder(512);
@@ -112,6 +120,10 @@ public class IncidentLocator extends Activity
         }
         coordinatesBox.append(sb.toString());
     }
+
+    // -----------------------------------------------------------------------
+    // helper methods
+    // -----------------------------------------------------------------------
 
     private void promptOpenLocationSettings(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
