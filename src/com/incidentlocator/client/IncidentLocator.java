@@ -10,31 +10,39 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.DialogInterface;
 
+import com.incidentlocator.client.IncidentLocatorInterface;
+import com.incidentlocator.client.GetLocationListener;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 
 import android.provider.Settings;
-import android.util.Log;
 import java.text.DecimalFormat;
 
 import com.incidentlocator.client.LocationLogger;
 import android.text.format.Time;
 
 
-public class IncidentLocator extends Activity
-{
+public class IncidentLocator extends Activity implements IncidentLocatorInterface {
     private static final String TAG = "IncidentLocator";
     private static Context context;
 
     protected LocationManager locationManager;
-    protected final LocationListener locationListener = new GetLocationListener();
+    protected final LocationListener locationListener = new GetLocationListener(this);
 
     // user location object
     private static Location location;
 
     private EditText coordinatesBox;
     private LocationLogger locLogger = new LocationLogger();
+
+    // -----------------------------------------------------------------------
+    // implement interface methods
+    // -----------------------------------------------------------------------
+
+    public void updateLocation(Location loc) {
+        location = loc;
+    }
 
     // -----------------------------------------------------------------------
     // activity life-cycle methods
@@ -81,22 +89,6 @@ public class IncidentLocator extends Activity
         locationManager.removeUpdates(locationListener);
     }
 
-    public class GetLocationListener implements LocationListener {
-        @Override
-        public void onLocationChanged(Location loc) {
-            location = loc;
-            Log.d(TAG, String.format("[%s]=>%s", location.getProvider(), location.toString()));
-        }
-
-        @Override
-        public void onProviderDisabled(String provider) {}
-
-        @Override
-        public void onProviderEnabled(String provider) {}
-
-        @Override
-        public void onStatusChanged(String provider, int status, Bundle extras) {}
-    }
     // -----------------------------------------------------------------------
     // interface controls methods
     // -----------------------------------------------------------------------
