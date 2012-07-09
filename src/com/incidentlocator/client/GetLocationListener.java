@@ -8,14 +8,16 @@ import com.incidentlocator.client.IncidentLocatorInterface;
 
 public class GetLocationListener implements LocationListener {
     private static final String TAG = "IncidentLocatorLocationListener";
-    private static IncidentLocatorInterface IL;
+    private static IncidentLocatorInterface app;
 
     // constructor - get interface from main activity
-    public GetLocationListener (IncidentLocatorInterface i) { IL = i; }
+    public GetLocationListener (IncidentLocatorInterface i) {
+        app = i;
+    }
 
     @Override
     public void onLocationChanged(Location location) {
-        IL.updateLocation(location);
+        app.updateLocation(location);
         Log.d(TAG, String.format("[%s]=>%s", location.getProvider(), location.toString()));
     }
 
