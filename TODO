@@ -1,6 +1,5 @@
 TODO
 ----
-* test network provider accuracy in a separate branch
 * get direction using gyro
 * show version number inside the application
 * test with other sdk versions to determine the min SDK support
