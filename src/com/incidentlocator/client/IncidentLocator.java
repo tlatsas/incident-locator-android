@@ -27,11 +27,11 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private static final String TAG = "IncidentLocator";
     private static Context context;
 
-    protected LocationManager locationManager;
-    protected final LocationListener locationListener = new GetLocationListener(this);
+    private LocationManager locationManager;
+    private LocationListener locationListener = new GetLocationListener(this);
 
     // user location object
-    private static Location location;
+    private Location location;
 
     private EditText coordinatesBox;
     private LocationLogger locLogger = new LocationLogger();
