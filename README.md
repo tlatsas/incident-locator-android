@@ -70,11 +70,13 @@ Permissions
 SDK Limitations
 ---------------
 
-* There is a [known][3] issue with stock android-sdk api v10 image which crashes the emulator when using GPS.
-Please use the image provided with and android-google-apis v10.
+* There is a [known][3] issue with stock android-sdk api v10 image which
+crashes the emulator when using GPS. Please use the image provided with
+android-google-apis v10.
 
-* There is an issue with android-google-apis v10 image. It fails to initialize the GPS when turning GPS functionality on/off from the android settings.
-It works fine with a real device.
+* There is an issue with android-google-apis v10 image. It fails to
+initialize the GPS when turning GPS functionality on/off from the
+android settings. It works fine with a real device though.
 
 
 License
