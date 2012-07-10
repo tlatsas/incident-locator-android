@@ -10,5 +10,5 @@ import android.location.Location;
 
 public interface IncidentLocatorInterface {
     public void updateLocation(Location loc);
-    public void updateDirection(double azimuth);
+    public void updateDirection(float azimuth);
 }

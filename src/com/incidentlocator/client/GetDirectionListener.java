@@ -50,7 +50,8 @@ public class GetDirectionListener implements SensorEventListener {
 
                 // update the direction variable in main activity
                 // with the calculated azimuth in degrees
-                app.updateDirection(java.lang.Math.toDegrees(orientation[0]));
+                float azimuth = (float) java.lang.Math.toDegrees(orientation[0]);
+                app.updateDirection(azimuth);
             }
         }
     }
