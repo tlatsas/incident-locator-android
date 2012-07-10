@@ -10,11 +10,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.DialogInterface;
 
-import com.incidentlocator.client.IncidentLocatorInterface;
-import com.incidentlocator.client.GetLocationListener;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.SensorEventListener;
+
+import com.incidentlocator.client.GetLocationListener;
+import com.incidentlocator.client.GetDirectionListener;
+import com.incidentlocator.client.IncidentLocatorInterface;
 
 import android.provider.Settings;
 import java.text.DecimalFormat;
@@ -30,8 +35,15 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private LocationManager locationManager;
     private LocationListener locationListener = new GetLocationListener(this);
 
+    private SensorManager sensorManager;
+    private SensorEventListener sensorListener = new GetDirectionListener(this);
+    private Sensor accelerometerSensor;
+    private Sensor magnetometerSensor;
+
     // user location object
     private Location location;
+    // device direction in degrees
+    private double direction;
 
     private EditText coordinatesBox;
     private LocationLogger locLogger = new LocationLogger();
@@ -42,6 +54,10 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
 
     public void updateLocation(Location loc) {
         location = loc;
+    }
+
+    public void updateDirection(double azimuth) {
+        direction = azimuth;
     }
 
     // -----------------------------------------------------------------------
@@ -56,8 +72,13 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
 
         coordinatesBox = (EditText) findViewById(R.id.show_message);
 
-        locationManager =
-            (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        // init sensor manager and sensors types
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+
 
         // separate older entries in external log file using dates
         // and a separator
@@ -81,12 +102,19 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
 
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+        // register device listeners
+        sensorManager.registerListener(sensorListener, accelerometerSensor,
+                                       SensorManager.SENSOR_DELAY_NORMAL);
+        sensorManager.registerListener(sensorListener, magnetometerSensor,
+                                       SensorManager.SENSOR_DELAY_NORMAL);
    }
 
     @Override
     public void onStop() {
         super.onStop();
         locationManager.removeUpdates(locationListener);
+        sensorManager.unregisterListener(sensorListener);
     }
 
     // -----------------------------------------------------------------------
