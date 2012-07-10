@@ -133,6 +133,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
                 .append(df.format(location.getLatitude()))
                 .append("Lng: ")
                 .append(df.format(location.getLongitude()))
+                .append(" ->")
+                .append(Double.toString(direction))
                 .append("\n");
 
             // log to external storage for debugging/testing
