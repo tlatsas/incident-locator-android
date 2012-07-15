@@ -105,9 +105,9 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
 
         // register device listeners
         sensorManager.registerListener(sensorListener, accelerometerSensor,
-                                       SensorManager.SENSOR_DELAY_NORMAL);
+                                       SensorManager.SENSOR_DELAY_UI);
         sensorManager.registerListener(sensorListener, magnetometerSensor,
-                                       SensorManager.SENSOR_DELAY_NORMAL);
+                                       SensorManager.SENSOR_DELAY_UI);
    }
 
     @Override
