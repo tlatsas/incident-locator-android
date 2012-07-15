@@ -42,8 +42,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
 
     // user location object
     private Location location;
-    // device direction in degrees
-    private float direction;
+    // device heading in degrees
+    private int heading;
 
     private EditText coordinatesBox;
     private LocationLogger locLogger = new LocationLogger();
@@ -56,8 +56,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         location = loc;
     }
 
-    public void updateDirection(float azimuth) {
-        direction = azimuth;
+    public void updateDirection(int heading) {
+        this.heading = heading;
     }
 
     // -----------------------------------------------------------------------
@@ -134,7 +134,7 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
                 .append("Lng: ")
                 .append(df.format(location.getLongitude()))
                 .append(" ->")
-                .append(String.valueOf(direction))
+                .append(String.valueOf(heading))
                 .append("\n");
 
             // log to external storage for debugging/testing

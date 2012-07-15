@@ -56,8 +56,11 @@ public class GetDirectionListener implements SensorEventListener {
                 // normalize result to 0..360 range
                 azimuth = (azimuth + 360) % 360;
 
+                // get our heading: degrees east of magnetic north
+                int heading = Math.round(360 - azimuth);
+
                 // update device direction variable in main activity
-                app.updateDirection(azimuth);
+                app.updateDirection(heading);
             }
         }
     }
