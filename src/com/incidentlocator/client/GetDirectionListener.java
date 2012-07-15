@@ -51,7 +51,7 @@ public class GetDirectionListener implements SensorEventListener {
                 SensorManager.getOrientation(rotationMatrix, orientation);
 
                 // normalize result to compass bearing
-                float azimuth = (float) java.lang.Math.toDegrees(orientation[0]);
+                float azimuth = (float) Math.toDegrees(orientation[0]);
                 azimuth = (azimuth + 360) % 360;
 
                 // update device direction variable in main activity
