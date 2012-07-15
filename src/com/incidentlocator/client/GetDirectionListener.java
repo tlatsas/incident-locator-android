@@ -28,11 +28,11 @@ public class GetDirectionListener implements SensorEventListener {
         // while the magnetometer gives us the earth's magnetic reading
         // which determines the device heading
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            gravityMatrix = event.values;
+            gravityMatrix = event.values.clone();
         }
 
         if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-            geomagneticMatrix = event.values;
+            geomagneticMatrix = event.values.clone();
         }
 
         if (gravityMatrix != null && geomagneticMatrix != null) {
