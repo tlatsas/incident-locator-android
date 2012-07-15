@@ -27,11 +27,13 @@ public class GetDirectionListener implements SensorEventListener {
         // the gravity readings used to determine pitch+roll
         // while the magnetometer gives us the earth's magnetic reading
         // which determines the device heading
-        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER)
+        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
             gravityMatrix = event.values;
+        }
 
-        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD)
+        if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
             geomagneticMatrix = event.values;
+        }
 
         if (gravityMatrix != null && geomagneticMatrix != null) {
             float[] rotationMatrix = new float[9];
