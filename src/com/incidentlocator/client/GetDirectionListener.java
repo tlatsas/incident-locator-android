@@ -36,8 +36,8 @@ public class GetDirectionListener implements SensorEventListener {
         }
 
         if (gravityMatrix != null && geomagneticMatrix != null) {
-            float[] rotationMatrix = new float[9];
             float[] inclinationMatrix = new float[9];
+            float[] rotationMatrix = new float[16];
 
             // we need to check if rotation matrix was calculated correctly in
             // cases like a device in free fall, then acceleration is 0
