@@ -12,7 +12,7 @@ Android client for an incident locator service.
 |------------------|-----------------------------------------------------
 | Homepage         | https://github.com/tlatsas/incident-locator-android
 | Version          | v0.1
-| Min SDK Version  | v10
+| Min SDK Version  | v8 (Froyo 2.2)
 | License          | BSD 3-Clause
 
 
