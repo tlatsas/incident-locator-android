@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private int heading;
 
     private EditText coordinatesBox;
+    private TextView headingView;
     private LocationLogger locLogger = new LocationLogger();
 
     // -----------------------------------------------------------------------
@@ -71,6 +73,7 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         setContentView(R.layout.main);
 
         coordinatesBox = (EditText) findViewById(R.id.show_message);
+        headingView = (TextView) findViewById(R.id.show_heading);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -133,14 +136,13 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
                 .append(df.format(location.getLatitude()))
                 .append("Lng: ")
                 .append(df.format(location.getLongitude()))
-                .append(" ->")
-                .append(String.valueOf(heading))
                 .append("\n");
 
             // log to external storage for debugging/testing
             locLogger.saveLocation(location.toString(), IncidentLocator.context);
         }
         coordinatesBox.append(sb.toString());
+        headingView.setText(String.valueOf(heading));
     }
 
     // -----------------------------------------------------------------------
