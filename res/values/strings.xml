@@ -3,5 +3,5 @@
     <string name="app_name">Incident Locator</string>
     <string name="get_location">Get Location</string>
     <string name="label_heading">Heading :</string>
-    <string name="text_heading"></string>
+    <string name="show_heading"></string>
 </resources>
