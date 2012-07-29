@@ -1,6 +1,6 @@
 TODO
 ----
-* test network provider accuracy in a separate branch
-* get direction using gyro
 * show version number inside the application
-* test with other sdk versions to determine the min SDK support
+* show camera image when registering a new incident
+* show camera overlay to assist user targeting
+* compensate for compass offset in devices with buggy kernels [major]

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">IncidentLocator</string>
+    <string name="app_name">Incident Locator</string>
     <string name="get_location">Get Location</string>
+    <string name="label_heading">Heading :</string>
+    <string name="show_heading"></string>
 </resources>

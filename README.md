@@ -4,16 +4,15 @@ Incident Locator - android client
 About
 -----
 
-Android client for an incident locator service.
+Android client for an incident locator service. Part of my thesis.
 
-**Note** this is still work in progress.
 
-| Project            | IncidentLocator-android
-|:-------------------|:--------------------------------------------------
-| Homepage           | https://github.com/tlatsas/incident-locator-android
-| Version            | v0.1
-| Min SDK Version    | v10
-| License            | BSD 3-Clause
+| Project          | IncidentLocator-android
+|------------------|-----------------------------------------------------
+| Homepage         | https://github.com/tlatsas/incident-locator-android
+| Version          | v0.2
+| Min SDK Version  | 8 (Froyo 2.2.x)
+| License          | BSD 3-Clause
 
 
 Build
@@ -70,11 +69,36 @@ Permissions
 SDK Limitations
 ---------------
 
-* There is a [known][3] issue with stock android-sdk api v10 image which crashes the emulator when using GPS.
-Please use the image provided with and android-google-apis v10.
+* There is a [known][3] issue with stock android-sdk api v10 image which
+crashes the emulator when using GPS. Please use the image provided with
+android-google-apis v10.
 
-* There is an issue with android-google-apis v10 image. It fails to initialize the GPS when turning GPS functionality on/off from the android settings.
-It works fine with a real device.
+* There is an issue with android-google-apis v10 image. It fails to
+initialize the GPS when turning GPS functionality on/off from the
+android settings. It works fine with a real device though.
+
+
+Compatibility
+-------------
+
+There is a known issue, reported by a number of users using various CM7 based roms, that
+leads to wrong compass readings. So far I have limited the problem to CM7 based roms
+using 2.6.35.7-perf+ kernel version.
+
+Table of tested devices and relevant version information:
+
+| Device Model     | Android rom version | Kernel version                     | Status
+|------------------|---------------------|------------------------------------|----------------------
+| Samsung GT-I5800 | 2.2                 | 2.6.32.9                           | working
+| ZTE Skate        | 2.3.7               | 2.6.35.7-perf+                     | wrong compass reading
+| ZTE SKate        | 4.0.4               | 2.6.35.7-perf+                     | wrong compass reading
+| ZTE Skate        | 2.3.5               | 2.6.35.7-perf+zte-kernel@Zdroid-SMT| working
+
+
+Precompiled APKs
+----------------
+
+Stable and development builds can be found [here][4].
 
 
 License
@@ -85,3 +109,4 @@ License
 [1]: https://github.com/tlatsas/incident-locator-android/tags
 [2]: http://developer.android.com/tools/building/building-eclipse.html
 [3]: http://code.google.com/p/android/issues/detail?id=13015
+[4]: http://dl.0dev.it/incident-locator-apks/
