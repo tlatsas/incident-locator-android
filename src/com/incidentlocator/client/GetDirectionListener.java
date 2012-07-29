@@ -7,6 +7,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import com.incidentlocator.client.IncidentLocatorInterface;
+import android.util.Log;
 
 public class GetDirectionListener implements SensorEventListener {
     private static final String TAG = "IncidentLocatorDirectionListener";
@@ -53,12 +54,14 @@ public class GetDirectionListener implements SensorEventListener {
                                                         SensorManager.AXIS_X,
                                                         SensorManager.AXIS_Z,
                                                         rotationMatrix);
+                    Log.d(TAG, "Device in vertical position");
                 } else {
                     // device in horizontal position
                     SensorManager.remapCoordinateSystem(rotationMatrix,
                                                         SensorManager.AXIS_X,
                                                         SensorManager.AXIS_Y,
                                                         rotationMatrix);
+                    Log.d(TAG, "Device in horizontal position");
                 }
 
                 // calculate device orientation
