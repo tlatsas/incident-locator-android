@@ -4,15 +4,14 @@ Incident Locator - android client
 About
 -----
 
-Android client for an incident locator service.
+Android client for an incident locator service. Part of my thesis.
 
-**Note** this is still work in progress.
 
 | Project          | IncidentLocator-android
 |------------------|-----------------------------------------------------
 | Homepage         | https://github.com/tlatsas/incident-locator-android
 | Version          | v0.1
-| Min SDK Version  | v8 (Froyo 2.2)
+| Min SDK Version  | 8 (Froyo 2.2.x)
 | License          | BSD 3-Clause
 
 
