@@ -10,6 +10,7 @@ import com.incidentlocator.client.IncidentLocatorInterface;
 
 public class GetDirectionListener implements SensorEventListener {
     private static final String TAG = "IncidentLocatorDirectionListener";
+    private static final float GRAVITY_THRESHOLD = SensorManager.STANDARD_GRAVITY / 2;
     private static IncidentLocatorInterface app;
 
     // variables to store sensor data from accelerometer
@@ -45,6 +46,21 @@ public class GetDirectionListener implements SensorEventListener {
                                                               gravityMatrix,
                                                               geomagneticMatrix);
             if (success) {
+                // check if device is on vertical position and remap axes
+                if (gravityMatrix[2] < GRAVITY_THRESHOLD) {
+                    // device is in vertical position
+                    SensorManager.remapCoordinateSystem(rotationMatrix,
+                                                        SensorManager.AXIS_X,
+                                                        SensorManager.AXIS_Z,
+                                                        rotationMatrix);
+                } else {
+                    // device in horizontal position
+                    SensorManager.remapCoordinateSystem(rotationMatrix,
+                                                        SensorManager.AXIS_X,
+                                                        SensorManager.AXIS_Y,
+                                                        rotationMatrix);
+                }
+
                 // calculate device orientation
                 float[] orientation = new float[3];
                 SensorManager.getOrientation(rotationMatrix, orientation);
