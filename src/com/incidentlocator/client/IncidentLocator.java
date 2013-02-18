@@ -27,6 +27,18 @@ import java.text.DecimalFormat;
 
 import com.incidentlocator.client.LocationLogger;
 import android.text.format.Time;
+import android.util.Log;
+
+import android.os.AsyncTask;
+import java.util.Map;
+import java.util.HashMap;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.OutputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import org.json.JSONObject;
 
 
 public class IncidentLocator extends Activity implements IncidentLocatorInterface {
@@ -89,6 +101,12 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         now.setToNow();
         String sep = String.format("==[ %s ] =======================", now.toString());
         locLogger.saveLocation(sep, IncidentLocator.context);
+
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("email", "");
+        data.put("password", "");
+
+        new RestLogin().execute(data);
     }
 
     @Override
@@ -165,4 +183,63 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    // -----------------------------------------------------------------------
+    // HTTP REST methods
+    // -----------------------------------------------------------------------
+    private class RestLogin extends AsyncTask <Map, Void, String> {
+        @Override
+        protected String doInBackground(Map... data) {
+            try {
+                JSONObject json_data = new JSONObject(data[0]);
+                byte[] byte_data = json_data.toString().getBytes("UTF-8");
+
+                URL url = null;
+                HttpURLConnection urlConnection = null;
+
+                url = new URL("http://10.0.2.2:3000/api/signin");
+
+                urlConnection = (HttpURLConnection) url.openConnection();
+
+                OutputStream output = null;
+                try {
+                    // make a POST request
+                    urlConnection.setDoOutput(true);
+
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setFixedLengthStreamingMode(byte_data.length);
+
+                    output = urlConnection.getOutputStream();
+                    output.write(byte_data);
+                    output.flush();
+                } finally {
+                    if (output != null) {
+                        try {
+                            output.close();
+                        } catch (IOException logOrIgnore) {
+                            Log.d(TAG, "HTTP Login Failed");
+                        }
+                    }
+                }
+                InputStream response = urlConnection.getInputStream();
+            } catch (Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+            }
+            return "test";
+        }
+    }
+    /*
+    private class RestProfile extends AsyncTask <Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+        }
+    }
+
+    private class RestReport extends AsyncTask <Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... params) {
+        }
+    }*/
+
 }
