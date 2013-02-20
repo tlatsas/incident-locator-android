@@ -2,6 +2,7 @@ package com.incidentlocator.client;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -188,6 +189,18 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     // HTTP REST methods
     // -----------------------------------------------------------------------
     private class RestLogin extends AsyncTask <Map, Void, String> {
+
+        private static final String TAG = "IncidentLocator::RestLogin";
+        ProgressDialog dialog = new ProgressDialog(IncidentLocator.this);
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Sign in...");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
         @Override
         protected String doInBackground(Map... data) {
             try {
@@ -225,8 +238,15 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
                 InputStream response = urlConnection.getInputStream();
             } catch (Exception e) {
                 Log.d(TAG, e.getLocalizedMessage());
+                return "";
             }
+
+            Log.d(TAG, "service login successful");
             return "test";
+        }
+
+        protected void onPostExecute(String result) {
+            dialog.dismiss();
         }
     }
     /*
