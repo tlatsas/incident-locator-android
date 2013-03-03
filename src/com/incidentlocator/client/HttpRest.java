@@ -37,6 +37,18 @@ public class HttpRest {
         new RestLogin().execute(data);
     }
 
+    public void profile() {
+        new RestProfile().execute();
+    }
+
+    public void report(Map data) {
+        new RestReport().execute(data);
+    }
+
+    // -----------------------------------------------------------------------
+    // helper methods
+    // -----------------------------------------------------------------------
+
     protected String readStream(InputStream is) {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -50,14 +62,6 @@ public class HttpRest {
             return "{}";
         }
     }
-
-    //public void login() {
-    //    new RestProfile().execute(data);
-    //}
-
-    //public void login(Map data) {
-    //    new RestReport().execute(data);
-    //}
 
     // -----------------------------------------------------------------------
     // http async tasks
@@ -136,9 +140,147 @@ public class HttpRest {
 
         protected void onPostExecute(String result) {
             dialog.dismiss();
+            new RestProfile().execute();
         }
     }
 
-    //private class RestProfile extends AsyncTask <Map, Void, String> { }
-    //private class RestReport extends AsyncTask <Map, Void, String> { }
+    private class RestProfile extends AsyncTask <Void, Void, String> {
+
+        ProgressDialog dialog = new ProgressDialog(context);
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Fetching used data...");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(false);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Void... arg0) {
+            // default return value on errors
+            String str_response = new String("{}");
+
+            // hold response from api here
+            String msg = new String("");
+
+            JSONObject json_response = null;
+            InputStream response = null;
+
+            try {
+                URL url = new URL(host + "api/profile");
+
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.setRequestProperty("Accept", "application/json");
+
+                response = new BufferedInputStream(urlConnection.getInputStream());
+                str_response = readStream(response);
+                json_response = new JSONObject(str_response);
+
+            } catch (Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+                return str_response;
+            } finally {
+                try {
+                    if (response != null) {
+                        response.close();
+                    }
+                } catch (IOException logOrIgnore) {
+                    Log.d(TAG, "io error");
+                }
+            }
+
+            try {
+                msg = json_response.getString("msg");
+            } catch (JSONException e) {
+                Log.d(TAG, "could not get 'msg' from response");
+                return str_response;
+            }
+
+            Log.d(TAG, msg);
+            return msg;
+        }
+
+        protected void onPostExecute(String result) {
+            dialog.dismiss();
+        }
+    }
+
+    private class RestReport extends AsyncTask <Map, Void, String> {
+
+        ProgressDialog dialog = new ProgressDialog(context);
+
+        @Override
+        protected void onPreExecute() {
+            dialog.setMessage("Sending report...");
+            dialog.setIndeterminate(true);
+            dialog.setCancelable(true);
+            dialog.show();
+        }
+
+        @Override
+        protected String doInBackground(Map... data) {
+            // default return value on errors
+            String str_response = new String("{}");
+
+            // hold response from api here
+            String msg = new String("");
+
+            JSONObject json_response = null;
+
+            try {
+                JSONObject json_data = new JSONObject(data[0]);
+                byte[] byte_data = json_data.toString().getBytes("UTF-8");
+
+                URL url = new URL(host + "api/report");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                OutputStream output = null;
+                try {
+                    // make a POST request
+                    urlConnection.setDoOutput(true);
+
+                    urlConnection.setRequestProperty("Content-Type", "application/json");
+                    urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setFixedLengthStreamingMode(byte_data.length);
+
+                    output = urlConnection.getOutputStream();
+                    output.write(byte_data);
+                    output.flush();
+                } finally {
+                    if (output != null) {
+                        try {
+                            output.close();
+                        } catch (IOException logOrIgnore) {
+                            Log.d(TAG, "io error");
+                        }
+                    }
+                }
+
+                InputStream response = new BufferedInputStream(urlConnection.getInputStream());
+                str_response = readStream(response);
+                json_response = new JSONObject(str_response);
+
+            } catch (Exception e) {
+                Log.d(TAG, e.getLocalizedMessage());
+                return str_response;
+            }
+
+            try {
+                msg = json_response.getString("msg");
+            } catch (JSONException e) {
+                Log.d(TAG, "could not get 'msg' from response");
+                return str_response;
+            }
+
+            Log.d(TAG, msg);
+            return msg;
+        }
+
+        protected void onPostExecute(String result) {
+            dialog.dismiss();
+        }
+    }
+
 }
