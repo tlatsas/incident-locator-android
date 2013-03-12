@@ -22,6 +22,7 @@ import com.incidentlocator.client.GetLocationListener;
 import com.incidentlocator.client.GetDirectionListener;
 import com.incidentlocator.client.IncidentLocatorInterface;
 import com.incidentlocator.client.HttpRest;
+import com.incidentlocator.client.IncidentLocatorLogin;
 
 import android.provider.Settings;
 import java.text.DecimalFormat;
@@ -30,8 +31,8 @@ import com.incidentlocator.client.LocationLogger;
 import android.text.format.Time;
 import android.util.Log;
 
-import java.util.Map;
-import java.util.HashMap;
+//import java.util.Map;
+//import java.util.HashMap;
 
 
 public class IncidentLocator extends Activity implements IncidentLocatorInterface {
@@ -52,8 +53,6 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private int heading;
 
     private EditText coordinatesBox;
-    private EditText usernameTxt;
-    private EditText passwordTxt;
     private TextView headingView;
     private LocationLogger locLogger = new LocationLogger();
 
@@ -80,10 +79,15 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         super.onCreate(savedInstanceState);
         IncidentLocator.context = getApplicationContext();
 
-        setContentView(R.layout.login);
+        Log.d(TAG, "starting login service");
+        // TODO: check if user has logged in before calling the login service
+        Intent login = new Intent(this, IncidentLocatorLogin.class);
+        startActivity(login);
 
-        usernameTxt = (EditText)findViewById(R.id.txt_username);
-        passwordTxt = (EditText)findViewById(R.id.txt_password);
+        // do not proceed to onStart()
+        finish();
+
+        setContentView(R.layout.main);
 
         coordinatesBox = (EditText) findViewById(R.id.show_message);
         headingView = (TextView) findViewById(R.id.show_heading);
@@ -94,7 +98,6 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-
 
         // separate older entries in external log file using dates
         // and a separator
@@ -156,17 +159,6 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         }
         coordinatesBox.append(sb.toString());
         headingView.setText(String.valueOf(heading));
-    }
-
-    public void httpLogin(View view) {
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("email", usernameTxt.getText().toString());
-        data.put("password", passwordTxt.getText().toString());
-
-        // TODO: get this from an optional text field
-        http.setHost("http://10.0.2.2:3000/");
-
-        http.login(data);
     }
 
     // -----------------------------------------------------------------------
