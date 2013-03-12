@@ -52,6 +52,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private int heading;
 
     private EditText coordinatesBox;
+    private EditText usernameTxt;
+    private EditText passwordTxt;
     private TextView headingView;
     private LocationLogger locLogger = new LocationLogger();
 
@@ -77,7 +79,11 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         IncidentLocator.context = getApplicationContext();
-        setContentView(R.layout.main);
+
+        setContentView(R.layout.login);
+
+        usernameTxt = (EditText)findViewById(R.id.txt_username);
+        passwordTxt = (EditText)findViewById(R.id.txt_password);
 
         coordinatesBox = (EditText) findViewById(R.id.show_message);
         headingView = (TextView) findViewById(R.id.show_heading);
@@ -96,13 +102,6 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         now.setToNow();
         String sep = String.format("==[ %s ] =======================", now.toString());
         locLogger.saveLocation(sep, IncidentLocator.context);
-
-        Map<String, String> data = new HashMap<String, String>();
-        data.put("email", "");
-        data.put("password", "");
-
-        http.setHost("http://10.0.2.2:3000/");
-        http.login(data);
     }
 
     @Override
@@ -135,7 +134,7 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     }
 
     // -----------------------------------------------------------------------
-    // interface controls methods
+    // interface callback methods
     // -----------------------------------------------------------------------
 
     public void getLocation(View view) {
@@ -157,6 +156,17 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         }
         coordinatesBox.append(sb.toString());
         headingView.setText(String.valueOf(heading));
+    }
+
+    public void httpLogin(View view) {
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("email", usernameTxt.getText().toString());
+        data.put("password", passwordTxt.getText().toString());
+
+        // TODO: get this from an optional text field
+        http.setHost("http://10.0.2.2:3000/");
+
+        http.login(data);
     }
 
     // -----------------------------------------------------------------------

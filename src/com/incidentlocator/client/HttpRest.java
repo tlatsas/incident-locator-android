@@ -140,7 +140,6 @@ public class HttpRest {
 
         protected void onPostExecute(String result) {
             dialog.dismiss();
-            new RestProfile().execute();
         }
     }
 
