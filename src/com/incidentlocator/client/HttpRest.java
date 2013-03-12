@@ -4,6 +4,7 @@ import android.util.Log;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.app.ProgressDialog;
+import android.widget.Toast;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -15,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import java.lang.CharSequence;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -67,7 +69,7 @@ public class HttpRest {
     // http async tasks
     // -----------------------------------------------------------------------
 
-    private class RestLogin extends AsyncTask <Map, Void, String> {
+    private class RestLogin extends AsyncTask <Map, Void, Boolean> {
 
         ProgressDialog dialog = new ProgressDialog(context);
 
@@ -80,7 +82,7 @@ public class HttpRest {
         }
 
         @Override
-        protected String doInBackground(Map... data) {
+        protected Boolean doInBackground(Map... data) {
             // default return value on errors
             String str_response = new String("{}");
 
@@ -124,22 +126,32 @@ public class HttpRest {
 
             } catch (Exception e) {
                 Log.d(TAG, e.getLocalizedMessage());
-                return str_response;
+                Log.d(TAG, str_response);
+                return false;
             }
 
             try {
                 msg = json_response.getString("msg");
             } catch (JSONException e) {
                 Log.d(TAG, "could not get 'msg' from response");
-                return str_response;
+                Log.d(TAG, str_response);
+                return false;
             }
 
             Log.d(TAG, msg);
-            return msg;
+            return true;
         }
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(Boolean result) {
             dialog.dismiss();
+            if (result == true) {
+                Log.d(TAG, "change view");
+            } else {
+                int duration = Toast.LENGTH_SHORT;
+                CharSequence text = "Cannot login to service";
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
         }
     }
 
