@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.content.Context;
 import android.content.Intent;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 
 import android.location.Location;
 import android.location.LocationManager;
@@ -34,9 +35,9 @@ import android.util.Log;
 //import java.util.Map;
 //import java.util.HashMap;
 
-
 public class IncidentLocator extends Activity implements IncidentLocatorInterface {
     private static final String TAG = "IncidentLocator";
+    private static final String PREFS = "IncidentLocatorPreferences";
     private static Context context;
 
     private LocationManager locationManager;
@@ -58,6 +59,7 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
 
     private HttpRest http = new HttpRest(IncidentLocator.this);
 
+    private SharedPreferences settings;
     // -----------------------------------------------------------------------
     // implement interface methods
     // -----------------------------------------------------------------------
@@ -79,13 +81,18 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         super.onCreate(savedInstanceState);
         IncidentLocator.context = getApplicationContext();
 
-        Log.d(TAG, "starting login service");
-        // TODO: check if user has logged in before calling the login service
-        Intent login = new Intent(this, IncidentLocatorLogin.class);
-        startActivity(login);
+        settings = getSharedPreferences(PREFS, 0);
 
-        // do not proceed to onStart()
-        finish();
+        boolean logged_in = settings.getBoolean("logged_in", false);
+        if (logged_in == false) {
+            Log.d(TAG, "starting login service");
+
+            Intent login = new Intent(this, IncidentLocatorLogin.class);
+            startActivity(login);
+
+            // do not proceed to onStart()
+            finish();
+        }
 
         setContentView(R.layout.main);
 
@@ -134,6 +141,14 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         super.onStop();
         locationManager.removeUpdates(locationListener);
         sensorManager.unregisterListener(sensorListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("logged_in", false);
+        editor.commit();
     }
 
     // -----------------------------------------------------------------------

@@ -2,6 +2,7 @@ package com.incidentlocator.client;
 
 import android.util.Log;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.app.ProgressDialog;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 
 public class HttpRest {
     private static final String TAG = "IncidentLocator::HttpRest";
+    private static final String PREFS = "IncidentLocatorPreferences";
 
     private String host = "http://10.0.2.2:3000/";
     private Context context = null;
@@ -63,6 +65,13 @@ public class HttpRest {
         } catch (IOException e) {
             return "{}";
         }
+    }
+
+    protected void setLogin(boolean status) {
+        SharedPreferences settings = context.getSharedPreferences(PREFS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putBoolean("logged_in", status);
+        editor.commit();
     }
 
     // -----------------------------------------------------------------------
@@ -144,6 +153,8 @@ public class HttpRest {
 
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
+            setLogin(result.booleanValue());
+
             if (result == true) {
                 Log.d(TAG, "change view");
             } else {
