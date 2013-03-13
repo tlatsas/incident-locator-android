@@ -2,6 +2,7 @@ package com.incidentlocator.client;
 
 import android.util.Log;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.app.ProgressDialog;
@@ -22,6 +23,8 @@ import java.lang.CharSequence;
 
 import org.json.JSONObject;
 import org.json.JSONException;
+
+import com.incidentlocator.client.IncidentLocator;
 
 public class HttpRest {
     private static final String TAG = "IncidentLocator::HttpRest";
@@ -212,6 +215,8 @@ public class HttpRest {
 
             if (result == true) {
                 Log.d(TAG, "change view");
+                Intent main = new Intent(context, IncidentLocator.class);
+                context.startActivity(main);
             } else {
                 int duration = Toast.LENGTH_SHORT;
                 CharSequence text = "Cannot login to service";

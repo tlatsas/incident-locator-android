@@ -118,6 +118,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     public void onStart() {
         super.onStart();
 
+        http.profile();
+
         // check if GPS is enabled
         boolean isGpsEnabled =
             locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
