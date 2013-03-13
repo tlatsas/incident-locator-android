@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import java.net.URL;
 import java.net.HttpURLConnection;
@@ -281,7 +283,9 @@ public class HttpRest {
                 try {
                     success = true;
                     String email = result.getString("email");
-                    //TODO set to UI
+                    Activity activity = (Activity) context;
+                    TextView user_info = (TextView) activity.findViewById(R.id.user_info);
+                    user_info.setText(email);
                 } catch (JSONException e) { }
             }
 
