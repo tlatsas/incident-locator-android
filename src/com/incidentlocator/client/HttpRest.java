@@ -232,7 +232,7 @@ public class HttpRest {
 
         @Override
         protected void onPreExecute() {
-            dialog.setMessage("Fetching used data...");
+            dialog.setMessage("Fetching user data...");
             dialog.setIndeterminate(true);
             dialog.setCancelable(false);
             dialog.show();
