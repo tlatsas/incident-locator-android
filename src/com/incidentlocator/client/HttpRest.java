@@ -224,6 +224,8 @@ public class HttpRest {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Accept", "application/json");
+                urlConnection.setRequestProperty("Cookie", cookie);
+                urlConnection.setRequestProperty("X-Csrt-Token", csrf);
 
                 response = new BufferedInputStream(urlConnection.getInputStream());
                 str_response = readStream(response);
@@ -294,6 +296,8 @@ public class HttpRest {
 
                     urlConnection.setRequestProperty("Content-Type", "application/json");
                     urlConnection.setRequestProperty("Accept", "application/json");
+                    urlConnection.setRequestProperty("Cookie", cookie);
+                    urlConnection.setRequestProperty("X-Csrt-Token", csrf);
                     urlConnection.setFixedLengthStreamingMode(byte_data.length);
 
                     output = urlConnection.getOutputStream();
