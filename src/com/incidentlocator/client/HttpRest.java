@@ -17,6 +17,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import java.lang.CharSequence;
 
 import org.json.JSONObject;
@@ -28,6 +29,9 @@ public class HttpRest {
 
     private String host = "http://10.0.2.2:3000/";
     private Context context = null;
+
+    private String cookie;
+    private String csrf;
 
     public HttpRest(Context c) {
         context = c;
@@ -72,6 +76,25 @@ public class HttpRest {
         SharedPreferences.Editor editor = settings.edit();
         editor.putBoolean("logged_in", status);
         editor.commit();
+    }
+
+    protected String parseHttpHeader(HttpURLConnection conn, String field) {
+        // conn.getHeaderFields() returns a map of the type:
+        // Map<String, List<String>>
+        List inner_list = conn.getHeaderFields().get(field);
+
+        if (!inner_list.isEmpty()) {
+            String value = inner_list.get(0).toString();
+            return value;
+        } else {
+            return null;
+        }
+    }
+
+    // extract the useful cookie part from the cookie value
+    protected String getCookieFromHeaderValue(String cookie) {
+        String[] cookie_parts = cookie.split(";");
+        return cookie_parts[0];
     }
 
     // -----------------------------------------------------------------------
@@ -129,6 +152,12 @@ public class HttpRest {
                     }
                 }
 
+                // parse and store response header values
+                csrf = parseHttpHeader(urlConnection, "X-Csrf-Token");
+                String cookie_value = parseHttpHeader(urlConnection, "Set-Cookie");
+                cookie = getCookieFromHeaderValue(cookie_value);
+
+                // parse response body
                 InputStream response = new BufferedInputStream(urlConnection.getInputStream());
                 str_response = readStream(response);
                 json_response = new JSONObject(str_response);
