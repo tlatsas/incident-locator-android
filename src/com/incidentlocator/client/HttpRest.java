@@ -195,7 +195,7 @@ public class HttpRest {
         }
     }
 
-    private class RestProfile extends AsyncTask <Void, Void, String> {
+    private class RestProfile extends AsyncTask <Void, Void, JSONObject> {
 
         ProgressDialog dialog = new ProgressDialog(context);
 
@@ -208,13 +208,7 @@ public class HttpRest {
         }
 
         @Override
-        protected String doInBackground(Void... arg0) {
-            // default return value on errors
-            String str_response = new String("{}");
-
-            // hold response from api here
-            String msg = new String("");
-
+        protected JSONObject doInBackground(Void... arg0) {
             JSONObject json_response = null;
             InputStream response = null;
 
@@ -228,12 +222,12 @@ public class HttpRest {
                 urlConnection.setRequestProperty("X-Csrt-Token", csrf);
 
                 response = new BufferedInputStream(urlConnection.getInputStream());
-                str_response = readStream(response);
+                String str_response = readStream(response);
                 json_response = new JSONObject(str_response);
 
             } catch (Exception e) {
                 Log.d(TAG, e.getLocalizedMessage());
-                return str_response;
+                return json_response;
             } finally {
                 try {
                     if (response != null) {
@@ -244,19 +238,28 @@ public class HttpRest {
                 }
             }
 
-            try {
-                msg = json_response.getString("msg");
-            } catch (JSONException e) {
-                Log.d(TAG, "could not get 'msg' from response");
-                return str_response;
-            }
-
-            Log.d(TAG, msg);
-            return msg;
+            Log.d(TAG, json_response.toString());
+            return json_response;
         }
 
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(JSONObject result) {
             dialog.dismiss();
+
+            boolean success = false;
+            if (result != null && result.length() > 0 && result.has("email") ) {
+                try {
+                    success = true;
+                    String email = result.getString("email");
+                    //TODO set to UI
+                } catch (JSONException e) { }
+            }
+
+            if (!success) {
+                int duration = Toast.LENGTH_SHORT;
+                CharSequence text = "Cannot get user info";
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+            }
         }
     }
 
