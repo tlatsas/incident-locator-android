@@ -29,12 +29,29 @@ public class HttpRest {
 
     private String host = "http://10.0.2.2:3000/";
     private Context context = null;
+    private SharedPreferences settings;
 
-    private String cookie;
-    private String csrf;
+    private String cookie = null;
+    private String csrf = null;
 
     public HttpRest(Context c) {
         context = c;
+    }
+
+    protected String getCookie() {
+        if (cookie == null || cookie.equals("")) {
+            settings = context.getSharedPreferences(PREFS, 0);
+            cookie = settings.getString("cookie", "");
+        }
+        return cookie;
+    }
+
+    protected String getCsrf() {
+        if (csrf == null || csrf.equals("")) {
+            settings = context.getSharedPreferences(PREFS, 0);
+            csrf = settings.getString("csrf", "");
+        }
+        return csrf;
     }
 
     public void setHost(String h) {
@@ -71,10 +88,17 @@ public class HttpRest {
         }
     }
 
-    protected void setLogin(boolean status) {
-        SharedPreferences settings = context.getSharedPreferences(PREFS, 0);
+    protected void settingsSetBoolean(String key, boolean value) {
+        settings = context.getSharedPreferences(PREFS, 0);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("logged_in", status);
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+
+    protected void settingsSetString(String key, String value) {
+        settings = context.getSharedPreferences(PREFS, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(key, value);
         editor.commit();
     }
 
@@ -156,6 +180,8 @@ public class HttpRest {
                 csrf = parseHttpHeader(urlConnection, "X-Csrf-Token");
                 String cookie_value = parseHttpHeader(urlConnection, "Set-Cookie");
                 cookie = getCookieFromHeaderValue(cookie_value);
+                settingsSetString("csrf", csrf);
+                settingsSetString("cookie", cookie);
 
                 // parse response body
                 InputStream response = new BufferedInputStream(urlConnection.getInputStream());
@@ -182,7 +208,7 @@ public class HttpRest {
 
         protected void onPostExecute(Boolean result) {
             dialog.dismiss();
-            setLogin(result.booleanValue());
+            settingsSetBoolean("logged_in", result.booleanValue());
 
             if (result == true) {
                 Log.d(TAG, "change view");
@@ -218,8 +244,8 @@ public class HttpRest {
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.setRequestProperty("Accept", "application/json");
-                urlConnection.setRequestProperty("Cookie", cookie);
-                urlConnection.setRequestProperty("X-Csrt-Token", csrf);
+                urlConnection.setRequestProperty("Cookie", getCookie());
+                urlConnection.setRequestProperty("X-Csrt-Token", getCsrf());
 
                 response = new BufferedInputStream(urlConnection.getInputStream());
                 String str_response = readStream(response);
