@@ -8,5 +8,6 @@
     <string name="show_heading"></string>
     <string name="lbl_username">Username/Email</string>
     <string name="lbl_password">Password</string>
+    <string name="lbl_host">Host</string>
     <string name="btn_sign_in">Sign in</string>
 </resources>
