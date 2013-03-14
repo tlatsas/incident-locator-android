@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import org.json.JSONException;
 
 import com.incidentlocator.client.IncidentLocator;
+import com.incidentlocator.client.IncidentLocatorLogin;
 
 public class HttpRest {
     private static final String TAG = "IncidentLocator::HttpRest";
@@ -127,6 +128,21 @@ public class HttpRest {
     }
 
     // -----------------------------------------------------------------------
+    // activity calls
+    // -----------------------------------------------------------------------
+
+    private void callLogin() {
+        Intent login = new Intent(context, IncidentLocatorLogin.class);
+        context.startActivity(login);
+    }
+
+    private void callMain() {
+        Intent main = new Intent(context, IncidentLocator.class);
+        context.startActivity(main);
+    }
+
+
+    // -----------------------------------------------------------------------
     // http async tasks
     // -----------------------------------------------------------------------
 
@@ -216,9 +232,8 @@ public class HttpRest {
             settingsSetBoolean("logged_in", result.booleanValue());
 
             if (result == true) {
-                Log.d(TAG, "change view");
-                Intent main = new Intent(context, IncidentLocator.class);
-                context.startActivity(main);
+                Log.d(TAG, "Logged in - calling main activity");
+                callMain();
             } else {
                 int duration = Toast.LENGTH_SHORT;
                 CharSequence text = "Cannot login to service";
