@@ -145,14 +145,6 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         sensorManager.unregisterListener(sensorListener);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean("logged_in", false);
-        editor.commit();
-    }
-
     // -----------------------------------------------------------------------
     // interface callback methods
     // -----------------------------------------------------------------------
