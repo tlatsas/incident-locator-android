@@ -6,31 +6,35 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import android.content.Context;
 import android.content.Intent;
 import android.content.DialogInterface;
-
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
+import android.provider.Settings;
+import android.text.format.Time;
+import android.util.Log;
+
+import java.text.DecimalFormat;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.incidentlocator.client.GetLocationListener;
 import com.incidentlocator.client.GetDirectionListener;
 import com.incidentlocator.client.IncidentLocatorInterface;
-
-import android.provider.Settings;
-import java.text.DecimalFormat;
-
+import com.incidentlocator.client.HttpRest;
+import com.incidentlocator.client.IncidentLocatorLogin;
 import com.incidentlocator.client.LocationLogger;
-import android.text.format.Time;
-
 
 public class IncidentLocator extends Activity implements IncidentLocatorInterface {
     private static final String TAG = "IncidentLocator";
+    private static final String PREFS = "IncidentLocatorPreferences";
     private static Context context;
 
     private LocationManager locationManager;
@@ -50,6 +54,9 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private TextView headingView;
     private LocationLogger locLogger = new LocationLogger();
 
+    private HttpRest http = new HttpRest(IncidentLocator.this);
+
+    private SharedPreferences settings;
     // -----------------------------------------------------------------------
     // implement interface methods
     // -----------------------------------------------------------------------
@@ -70,6 +77,20 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         IncidentLocator.context = getApplicationContext();
+
+        settings = getSharedPreferences(PREFS, 0);
+
+        boolean logged_in = settings.getBoolean("logged_in", false);
+        if (logged_in == false) {
+            Log.d(TAG, "starting login service");
+
+            Intent login = new Intent(this, IncidentLocatorLogin.class);
+            startActivity(login);
+
+            // do not proceed to onStart()
+            finish();
+        }
+
         setContentView(R.layout.main);
 
         coordinatesBox = (EditText) findViewById(R.id.show_message);
@@ -82,7 +103,6 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-
         // separate older entries in external log file using dates
         // and a separator
         Time now = new Time();
@@ -94,6 +114,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     @Override
     public void onStart() {
         super.onStart();
+
+        http.profile();
 
         // check if GPS is enabled
         boolean isGpsEnabled =
@@ -121,33 +143,64 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     }
 
     // -----------------------------------------------------------------------
-    // interface controls methods
+    // interface callback methods
     // -----------------------------------------------------------------------
 
     public void getLocation(View view) {
-        StringBuilder sb = new StringBuilder(512);
-        if (location == null) {
-            sb.append("waiting location data...\n");
+        if (hasLocation()) {
+            logLocation();
         } else {
-            DecimalFormat df = new DecimalFormat(".000000");
-            df.setRoundingMode(java.math.RoundingMode.DOWN);
-            sb
-                .append("Lat: ")
-                .append(df.format(location.getLatitude()))
-                .append("Lng: ")
-                .append(df.format(location.getLongitude()))
-                .append("\n");
-
-            // log to external storage for debugging/testing
-            locLogger.saveLocation(location.toString(), IncidentLocator.context);
+            coordinatesBox.append("Location data not available yet.. \n");
         }
-        coordinatesBox.append(sb.toString());
-        headingView.setText(String.valueOf(heading));
+    }
+
+    public void sendReport(View view) {
+        if (hasLocation()) {
+            logLocation();
+            Map data = reportData();
+            http.report(data);
+        } else {
+            CharSequence text = "Location is unavailable";
+            Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     // -----------------------------------------------------------------------
     // helper methods
     // -----------------------------------------------------------------------
+
+    private Map reportData() {
+        Map<String, Double> data = new HashMap<String, Double>();
+        data.put("latitude", location.getLatitude());
+        data.put("longitude", location.getLongitude());
+        data.put("heading", (double)heading);
+        return data;
+    }
+
+    private boolean hasLocation() {
+        return (location == null)? false : true;
+    }
+
+    /* log location/heading on application log and on the coordinates box */
+    private void logLocation() {
+        DecimalFormat df = new DecimalFormat(".000000");
+        df.setRoundingMode(java.math.RoundingMode.DOWN);
+
+        StringBuilder sb = new StringBuilder(512);
+        sb
+            .append("Lat: ")
+            .append(df.format(location.getLatitude()))
+            .append("Lng: ")
+            .append(df.format(location.getLongitude()))
+            .append("\n");
+
+        coordinatesBox.append(sb.toString());
+        headingView.setText(String.valueOf(heading));
+
+        // application logs
+        locLogger.saveLocation(location.toString(), IncidentLocator.context);
+    }
 
     private void promptOpenLocationSettings(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
