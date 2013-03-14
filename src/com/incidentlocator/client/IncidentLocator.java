@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import android.content.Context;
 import android.content.Intent;
@@ -150,29 +151,50 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     // -----------------------------------------------------------------------
 
     public void getLocation(View view) {
-        StringBuilder sb = new StringBuilder(512);
-        if (location == null) {
-            sb.append("waiting location data...\n");
+        if (hasLocation()) {
+            logLocation();
         } else {
-            DecimalFormat df = new DecimalFormat(".000000");
-            df.setRoundingMode(java.math.RoundingMode.DOWN);
-            sb
-                .append("Lat: ")
-                .append(df.format(location.getLatitude()))
-                .append("Lng: ")
-                .append(df.format(location.getLongitude()))
-                .append("\n");
-
-            // log to external storage for debugging/testing
-            locLogger.saveLocation(location.toString(), IncidentLocator.context);
+            coordinatesBox.append("Location data not available yet.. \n");
         }
-        coordinatesBox.append(sb.toString());
-        headingView.setText(String.valueOf(heading));
+    }
+
+    public void sendReport(View view) {
+        if (hasLocation()) {
+            logLocation();
+        } else {
+            CharSequence text = "Location is unavailable";
+            Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     // -----------------------------------------------------------------------
     // helper methods
     // -----------------------------------------------------------------------
+
+    private boolean hasLocation() {
+        return (location == null)? false : true;
+    }
+
+    /* log location/heading on application log and on the coordinates box */
+    private void logLocation() {
+        DecimalFormat df = new DecimalFormat(".000000");
+        df.setRoundingMode(java.math.RoundingMode.DOWN);
+
+        StringBuilder sb = new StringBuilder(512);
+        sb
+            .append("Lat: ")
+            .append(df.format(location.getLatitude()))
+            .append("Lng: ")
+            .append(df.format(location.getLongitude()))
+            .append("\n");
+
+        coordinatesBox.append(sb.toString());
+        headingView.setText(String.valueOf(heading));
+
+        // application logs
+        locLogger.saveLocation(location.toString(), IncidentLocator.context);
+    }
 
     private void promptOpenLocationSettings(String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
