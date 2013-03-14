@@ -349,8 +349,8 @@ public class HttpRest {
 
                     urlConnection.setRequestProperty("Content-Type", "application/json");
                     urlConnection.setRequestProperty("Accept", "application/json");
-                    urlConnection.setRequestProperty("Cookie", cookie);
-                    urlConnection.setRequestProperty("X-Csrt-Token", csrf);
+                    urlConnection.setRequestProperty("Cookie", getCookie());
+                    urlConnection.setRequestProperty("X-Csrf-Token", getCsrf());
                     urlConnection.setFixedLengthStreamingMode(byte_data.length);
 
                     output = urlConnection.getOutputStream();
@@ -388,6 +388,8 @@ public class HttpRest {
 
         protected void onPostExecute(String result) {
             dialog.dismiss();
+            Toast toast = Toast.makeText(context, result, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 

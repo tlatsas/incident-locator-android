@@ -7,34 +7,30 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-
 import android.location.Location;
 import android.location.LocationManager;
 import android.location.LocationListener;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
+import android.provider.Settings;
+import android.text.format.Time;
+import android.util.Log;
+
+import java.text.DecimalFormat;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.incidentlocator.client.GetLocationListener;
 import com.incidentlocator.client.GetDirectionListener;
 import com.incidentlocator.client.IncidentLocatorInterface;
 import com.incidentlocator.client.HttpRest;
 import com.incidentlocator.client.IncidentLocatorLogin;
-
-import android.provider.Settings;
-import java.text.DecimalFormat;
-
 import com.incidentlocator.client.LocationLogger;
-import android.text.format.Time;
-import android.util.Log;
-
-//import java.util.Map;
-//import java.util.HashMap;
 
 public class IncidentLocator extends Activity implements IncidentLocatorInterface {
     private static final String TAG = "IncidentLocator";
@@ -161,6 +157,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     public void sendReport(View view) {
         if (hasLocation()) {
             logLocation();
+            Map data = reportData();
+            http.report(data);
         } else {
             CharSequence text = "Location is unavailable";
             Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
@@ -171,6 +169,14 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     // -----------------------------------------------------------------------
     // helper methods
     // -----------------------------------------------------------------------
+
+    private Map reportData() {
+        Map<String, Double> data = new HashMap<String, Double>();
+        data.put("latitude", location.getLatitude());
+        data.put("longitude", location.getLongitude());
+        data.put("heading", (double)heading);
+        return data;
+    }
 
     private boolean hasLocation() {
         return (location == null)? false : true;
