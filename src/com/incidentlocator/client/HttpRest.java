@@ -366,7 +366,12 @@ public class HttpRest {
                     }
                 }
 
-                InputStream response = new BufferedInputStream(urlConnection.getInputStream());
+                InputStream response;
+                if (urlConnection.getResponseCode() >= 300) {
+                    response = new BufferedInputStream(urlConnection.getErrorStream());
+                } else {
+                    response = new BufferedInputStream(urlConnection.getInputStream());
+                }
                 str_response = readStream(response);
                 json_response = new JSONObject(str_response);
 
