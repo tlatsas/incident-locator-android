@@ -171,6 +171,7 @@ public class HttpRest {
             String msg = new String("");
 
             JSONObject json_response = null;
+            Boolean success = new Boolean(false);
 
             try {
                 JSONObject json_data = new JSONObject(data[0]);
@@ -201,22 +202,28 @@ public class HttpRest {
                     }
                 }
 
-                // parse and store response header values
-                csrf = parseHttpHeader(urlConnection, "X-Csrf-Token");
-                String cookie_value = parseHttpHeader(urlConnection, "Set-Cookie");
-                cookie = getCookieFromHeaderValue(cookie_value);
-                settingsSetString("csrf", csrf);
-                settingsSetString("cookie", cookie);
+                InputStream response;
+                if (urlConnection.getResponseCode() >= 300) {
+                    response = new BufferedInputStream(urlConnection.getErrorStream());
+                } else {
+                    response = new BufferedInputStream(urlConnection.getInputStream());
 
-                // parse response body
-                InputStream response = new BufferedInputStream(urlConnection.getInputStream());
+                    // parse and store response header values
+                    csrf = parseHttpHeader(urlConnection, "X-Csrf-Token");
+                    String cookie_value = parseHttpHeader(urlConnection, "Set-Cookie");
+                    cookie = getCookieFromHeaderValue(cookie_value);
+                    settingsSetString("csrf", csrf);
+                    settingsSetString("cookie", cookie);
+                    success = true;
+                }
+
                 str_response = readStream(response);
                 json_response = new JSONObject(str_response);
 
             } catch (Exception e) {
                 Log.d(TAG, e.getLocalizedMessage());
                 Log.d(TAG, str_response);
-                return false;
+                return success;
             }
 
             try {
@@ -224,24 +231,23 @@ public class HttpRest {
             } catch (JSONException e) {
                 Log.d(TAG, "could not get 'msg' from response");
                 Log.d(TAG, str_response);
-                return false;
+                return success;
             }
 
             Log.d(TAG, msg);
-            return true;
+            return success;
         }
 
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(Boolean success) {
             dialog.dismiss();
-            settingsSetBoolean("logged_in", result.booleanValue());
+            settingsSetBoolean("logged_in", success.booleanValue());
 
-            if (result == true) {
+            if (success.booleanValue()) {
                 Log.d(TAG, "Logged in - calling main activity");
                 callMain();
             } else {
-                int duration = Toast.LENGTH_SHORT;
                 CharSequence text = "Cannot login to service";
-                Toast toast = Toast.makeText(context, text, duration);
+                Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
                 toast.show();
             }
         }
