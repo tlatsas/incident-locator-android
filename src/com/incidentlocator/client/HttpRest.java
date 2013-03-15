@@ -61,6 +61,10 @@ public class HttpRest {
     }
 
     public void setHost(String h) {
+        String last = h.substring(h.length() - 1);
+        if (! last.equals("/")) {
+            h = h + "/";
+        }
         host = h;
     }
 
