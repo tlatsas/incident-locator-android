@@ -66,6 +66,10 @@ Permissions
 
     Log coordinates in external storage.
 
+* INTERNET
+
+    Communicate with the service using the network.
+
 
 SDK Limitations
 ---------------
