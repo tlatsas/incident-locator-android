@@ -114,4 +114,4 @@ License
 [1]: https://github.com/tlatsas/incident-locator-android/tags
 [2]: http://developer.android.com/tools/building/building-eclipse.html
 [3]: http://code.google.com/p/android/issues/detail?id=13015
-[4]: http://dl.0dev.it/incident-locator-apks/
+[4]: http://dl.kodama.gr/incident-locator-apks/
