@@ -93,9 +93,6 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
 
         setContentView(R.layout.main);
 
-        coordinatesBox = (EditText) findViewById(R.id.show_message);
-        headingView = (TextView) findViewById(R.id.show_heading);
-
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         // init sensor manager and sensors types
@@ -115,6 +112,8 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     public void onStart() {
         super.onStart();
 
+        coordinatesBox = (EditText) findViewById(R.id.show_message);
+        headingView = (TextView) findViewById(R.id.show_heading);
         http.profile();
 
         // check if GPS is enabled
