@@ -47,7 +47,7 @@ public class IncidentLocatorLogin extends Activity {
         settings = context.getSharedPreferences(PREFS, 0);
         username = settings.getString("username", "");
         password = settings.getString("password", "");
-        host = settings.getString("host", "http://10.0.2.2:3000");
+        host = settings.getString("host", context.getString(R.string.default_server));
 
         usernameTxt.setText(username);
         passwordTxt.setText(password);
