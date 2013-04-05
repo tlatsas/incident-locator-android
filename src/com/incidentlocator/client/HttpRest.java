@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.lang.CharSequence;
+import java.lang.Exception;
 
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -33,7 +34,7 @@ public class HttpRest {
     private static final String TAG = "IncidentLocator::HttpRest";
     private static final String PREFS = "IncidentLocatorPreferences";
 
-    private String host = "http://10.0.2.2:3000/";
+    private String host = null;
     private Context context = null;
     private SharedPreferences settings;
 
@@ -42,6 +43,11 @@ public class HttpRest {
 
     public HttpRest(Context c) {
         context = c;
+    }
+
+    public HttpRest(Context c, String h) {
+        context = c;
+        setHost(h);
     }
 
     protected String getCookie() {
@@ -66,6 +72,42 @@ public class HttpRest {
             h = h + "/";
         }
         host = h;
+    }
+
+    /*
+     * Get the server host
+     *
+     * Note: host attribute is preferred over the shared preferences one
+     *
+     * If you don't want to use the host value saved in the shared preferences
+     * use one of the following options:
+     *
+     *      * set the host when creating the object
+     *      * set the host using setHost()
+     *
+     *
+     * If host resolves to null or to an empty string, then the shared preferences
+     * databased is queried. If there is an entry with key "host" then this is used
+     * to set the host attribute.
+     *
+     * Throws exception if there is no "host" entry in the application preferences
+     * and the host attribute is empty.
+     *
+     */
+    protected String getHost() throws Exception {
+        if (host == null || host.length() == 0) {
+            settings = context.getSharedPreferences(PREFS, 0);
+            if (! settings.contains("host")) {
+                throw new HostException();
+            }
+            String pref_host = settings.getString("host", "");
+
+            // save the host to avoid quering the database
+            // and optionaly add the required trailing slash
+            setHost(pref_host);
+        }
+
+        return host;
     }
 
     public void login(Map data) {
@@ -147,6 +189,16 @@ public class HttpRest {
 
 
     // -----------------------------------------------------------------------
+    // exceptions
+    // -----------------------------------------------------------------------
+
+    public class HostException extends Exception {
+        public HostException() {
+            super("Missing server host");
+        }
+    }
+
+    // -----------------------------------------------------------------------
     // http async tasks
     // -----------------------------------------------------------------------
 
@@ -177,7 +229,7 @@ public class HttpRest {
                 JSONObject json_data = new JSONObject(data[0]);
                 byte[] byte_data = json_data.toString().getBytes("UTF-8");
 
-                URL url = new URL(host + "api/signin");
+                URL url = new URL(getHost() + "api/signin");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                 OutputStream output = null;
@@ -271,7 +323,7 @@ public class HttpRest {
             InputStream response = null;
 
             try {
-                URL url = new URL(host + "api/profile");
+                URL url = new URL(getHost() + "api/profile");
 
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -349,7 +401,7 @@ public class HttpRest {
                 JSONObject json_data = new JSONObject(data[0]);
                 byte[] byte_data = json_data.toString().getBytes("UTF-8");
 
-                URL url = new URL(host + "api/report");
+                URL url = new URL(getHost() + "api/report");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                 OutputStream output = null;
