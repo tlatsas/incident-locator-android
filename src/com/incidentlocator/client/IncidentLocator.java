@@ -221,9 +221,10 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     }
 
     private void dispatchMediaScanIntent() {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mediaScanIntent.setData(imageUri);
-        this.sendBroadcast(mediaScanIntent);
+        Intent scan = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        scan.setData(imageUri);
+        Log.d(TAG, "sending media scan broadcast");
+        sendBroadcast(scan);
     }
 
     private Map reportData() {
