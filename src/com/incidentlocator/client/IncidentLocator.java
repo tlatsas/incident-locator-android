@@ -174,7 +174,12 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     public void takePhoto(View view) {
         if (PhotoHelper.hasCamera(context)) {
             if (PhotoHelper.isCameraAppAvailable(context)) {
-                dispatchTakePhotoIntent();
+                if (PhotoHelper.isSdAvailable()) {
+                    dispatchTakePhotoIntent();
+                } else {
+                    CharSequence text = "Cannot write to external medium";
+                    Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+                }
             } else {
                 CharSequence text = "No suitable camera application found installed";
                 Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);

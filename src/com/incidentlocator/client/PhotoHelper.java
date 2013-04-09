@@ -34,6 +34,15 @@ public final class PhotoHelper {
         return pm.hasSystemFeature(PackageManager.FEATURE_CAMERA);
     }
 
+    /*
+     * Check of SD is mounted and is writeable
+     *
+     */
+    public static boolean isSdAvailable() {
+        final String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
     public static Uri getNewPhotoFileUri() {
         final File photoDir = Environment.getExternalStoragePublicDirectory(
             Environment.DIRECTORY_PICTURES);
