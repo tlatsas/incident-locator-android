@@ -18,8 +18,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.hardware.SensorEventListener;
 import android.provider.Settings;
+import android.provider.MediaStore;
 import android.text.format.Time;
 import android.util.Log;
+import android.net.Uri;
 
 import java.text.DecimalFormat;
 import java.util.Map;
@@ -31,10 +33,12 @@ import com.incidentlocator.client.IncidentLocatorInterface;
 import com.incidentlocator.client.HttpRest;
 import com.incidentlocator.client.IncidentLocatorLogin;
 import com.incidentlocator.client.LocationLogger;
+import com.incidentlocator.client.PhotoHelper;
 
 public class IncidentLocator extends Activity implements IncidentLocatorInterface {
     private static final String TAG = "IncidentLocator";
     private static final String PREFS = "IncidentLocatorPreferences";
+    private static final int PHOTO_CODE = 100;
     private static Context context;
 
     private LocationManager locationManager;
@@ -49,6 +53,7 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private Location location;
     // device heading in degrees
     private int heading;
+    private Uri imageUri;
 
     private EditText coordinatesBox;
     private TextView headingView;
@@ -57,6 +62,7 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
     private HttpRest http = new HttpRest(IncidentLocator.this);
 
     private SharedPreferences settings;
+
     // -----------------------------------------------------------------------
     // implement interface methods
     // -----------------------------------------------------------------------
@@ -165,9 +171,55 @@ public class IncidentLocator extends Activity implements IncidentLocatorInterfac
         }
     }
 
+    public void takePhoto(View view) {
+        if (PhotoHelper.hasCamera(context)) {
+            if (PhotoHelper.isCameraAppAvailable(context)) {
+                dispatchTakePhotoIntent();
+            } else {
+                CharSequence text = "No suitable camera application found installed";
+                Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        } else {
+            CharSequence text = "Your device does not support this feature";
+            Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PHOTO_CODE) {
+            String msg;
+            if (resultCode == RESULT_OK) {
+                msg = "Photo saved successfully";
+                dispatchMediaScanIntent();
+            } else if (resultCode == RESULT_CANCELED) {
+                msg = "Photo activity canceled";
+            } else {
+                msg = "Failed taking photo";
+            }
+            Log.d(TAG, msg);
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     // -----------------------------------------------------------------------
     // helper methods
     // -----------------------------------------------------------------------
+
+    private void dispatchTakePhotoIntent() {
+        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        imageUri = PhotoHelper.getNewPhotoFileUri();
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        startActivityForResult(takePhotoIntent, PHOTO_CODE);
+    }
+
+    private void dispatchMediaScanIntent() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(imageUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
 
     private Map reportData() {
         Map<String, Double> data = new HashMap<String, Double>();
