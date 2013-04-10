@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Incident Locator</string>
-    <string name="get_location">Get Location</string>
+    <string name="get_location">View Location</string>
+    <string name="send_report">Send Report</string>
+    <string name="take_photo">Take Photo</string>
     <string name="label_heading">Heading :</string>
-    <string name="show_heading"></string>
+    <string name="lbl_username">Email</string>
+    <string name="lbl_password">Password</string>
+    <string name="lbl_host">Host</string>
+    <string name="btn_sign_in">Sign in</string>
 </resources>
