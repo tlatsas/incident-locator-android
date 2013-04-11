@@ -10,7 +10,7 @@ Android client for an incident locator service. Part of my thesis.
 | Project          | IncidentLocator-android
 |------------------|-----------------------------------------------------
 | Homepage         | https://github.com/tlatsas/incident-locator-android
-| Version          | v0.8
+| Version          | v0.8.1
 | Min SDK Version  | 8 (Froyo 2.2.x)
 | Max SDK Version  | 17 (Jelly Bean 4.2.x)
 | License          | BSD 3-Clause
@@ -108,10 +108,19 @@ Stable and development builds can be found [here][4].
 
 License
 -------
+
 (c) 2012 Tasos Latsas, under the BSD 3-Clause License. See `COPYING`.
+
+
+Icons
+-----
+
+Location map [icon][6] from IconFinder, under [CC BY 3.0][5].
 
 
 [1]: https://github.com/tlatsas/incident-locator-android/tags
 [2]: http://developer.android.com/tools/building/building-eclipse.html
 [3]: http://code.google.com/p/android/issues/detail?id=13015
 [4]: http://dl.kodama.gr/incident-locator-apks/
+[5]: https://creativecommons.org/licenses/by/3.0/
+[6]: http://www.iconfinder.com/icondetails/65862/128/location_map_icon
