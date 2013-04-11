@@ -8,11 +8,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import com.incidentlocator.client.IncidentLocatorInterface;
 import android.util.Log;
+import java.lang.System;
+import java.util.Arrays;
 
 public class GetDirectionListener implements SensorEventListener {
     private static final String TAG = "IncidentLocatorDirectionListener";
     private static final float GRAVITY_THRESHOLD = SensorManager.STANDARD_GRAVITY / 2;
     private static IncidentLocatorInterface app;
+    private static final String[] BUGGY = { "2.6.35.7-perf+" };
+    private boolean isBuggy = false;
 
     // variables to store sensor data from accelerometer
     // and magnitometer respectively
@@ -20,6 +24,16 @@ public class GetDirectionListener implements SensorEventListener {
 
     public GetDirectionListener(IncidentLocatorInterface i) {
         app = i;
+
+        // try to detect buggy kernel versions which result in
+        // weird compass readings
+        // @see: https://github.com/tlatsas/incident-locator-android#compatibility
+        String kernel = System.getProperty("os.version");
+        Log.d(TAG, "Detected kernel version : " + kernel);
+
+        if (Arrays.asList(BUGGY).contains(kernel)) {
+            isBuggy = true;
+        }
     }
 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {  }
@@ -73,6 +87,10 @@ public class GetDirectionListener implements SensorEventListener {
 
                 // normalize result to 0..360 range
                 azimuth = (azimuth + 360) % 360;
+
+                if (isBuggy) {
+                    azimuth = 360 - azimuth;
+                }
 
                 // get heading as integer
                 int heading = Math.round(azimuth);
