@@ -11,7 +11,7 @@ Android client for an incident locator service. Part of my thesis.
 |------------------|-----------------------------------------------------
 | Homepage         | https://github.com/tlatsas/incident-locator-android
 | Version          | v0.8.1
-| Min SDK Version  | 8 (Froyo 2.2.x)
+| Min SDK Version  | 9 (Gingerbread 2.3.x)
 | Max SDK Version  | 17 (Jelly Bean 4.2.x)
 | License          | BSD 3-Clause
 
